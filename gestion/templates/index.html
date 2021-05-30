@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% load static %}
+
+<div class="container-fluid">
+  <p></p>
+</div>
+
+<div class="dropdown-menu">
+  <span class="dropdown-item-text">Dropdown item text</span>
+  <a class="dropdown-item" href="#">Action</a>
+  <a class="dropdown-item" href="#">Another action</a>
+  <a class="dropdown-item" href="#">Something else here</a>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3">
+      <h1 class="my-3">
+        <p class="font-weight-light">Categorías</p>
+      </h1>
+      <ul class="list-group">
+        <li class="list-group-item"><a href="#">Mas populares</a></li>
+        <li class="list-group-item"><a href="#">Impresoras</a></li>
+        <li class="list-group-item"><a href="#">Procesadores</a></li>
+        <li class="list-group-item"><a href="#">Cartuchos de tinta</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-9">
+      <div class="container-fluid">
+        <div class="row">         
+          {% for i in articulos %}
+          <div class="card text-center" style="max-width: 250px; margin: 5px;">
+            <img class="card-img-top" src="{{ i.imagen.url }}"alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">${{ i.precio }}</h4>
+              <p class="card-text">
+                {{ i.nombre }}
+                <a href="#" class="stretched-link"></a>
+              </p>
+                <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
+            </div>
+          </div>
+          {% endfor %}
+        </div> 
+      </div>
+    </div>
+  </div>
+  <div class="row">
+  </div>
+</div>
+
+{% endblock content %}

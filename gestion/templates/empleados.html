@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if empleados %}
+	{% for empleado in empleados %}
+		<p>{{ empleado.username }}</p>
+	{% endfor %}
+{% endif %}
+
+{% endblock %}
