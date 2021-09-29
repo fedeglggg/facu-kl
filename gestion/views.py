@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout as django_logout
 from django.contrib.auth.models import Group 
 
 from django.shortcuts import render, redirect
@@ -14,11 +14,149 @@ def index(request):
 	}
 	return render(request, 'index.html', context)
 
+def gestion(request):
+	return render(request, 'gestion.html')
 
 def signin(request):
-	return render(request, 'signin.html')
+	if request.method == 'POST':
+		form = RegisterForm(request.POST)
+		if form.is_valid():
+			username = form.cleaned_data['email']
+			if User.objects.filter(username=username).exists():
+				context = {
+					'error_message': 'Ya existe un usuario registrado con este email',
+					'form': form
+				}
+				return render(request, 'signin.html', context)
+			else:
+				password = form.cleaned_data['password1']
+				password2 = form.cleaned_data['password2']
+				if password != password2:
+					context = {
+						'error_message': 'Las constraseñas no coinciden',
+						'form': form
+					}
+					return render(request, 'signin.html', context)
+				first_name = form.cleaned_data['first_name']
+				last_name = form.cleaned_data['last_name']
+				new_user = User(username=username, password=password, first_name=first_name, last_name=last_name) 
+				new_user.save()
+				try:
+					group = Group.objects.get(name='clientes')
+				except Group.DoesNotExist:
+					group = Group(name='clientes')
+					group.save()
+				new_user.groups.add(group)
+				form = RegisterForm()
+				context = {
+					'success_message': 'Usuario creado correctamente',
+					'form': form
+				}
+				return render(request, 'signin.html', context)
+
+		else:
+			form = RegisterForm()
+			context = {
+				'error_message': 'La información no es valida, porfavor intente nuevamente',
+				'form': form
+			}
+			return render(request, 'signin.html', context)
+	else:
+		form = RegisterForm()
+		context = {
+			'form': form
+		}
+	return render(request, 'signin.html', context)
+
+
 
 def signin_empleado(request):
+	if request.method == 'POST':
+		form = RegisterForm(request.POST)
+		if form.is_valid():
+			username = form.cleaned_data['email']
+			if User.objects.filter(username=username).exists():
+				context = {
+					'error_message': 'El usuario ya existe',
+					'form': form
+				}
+				return render(request, 'signin_empleado.html', context)
+			else:
+				password = form.cleaned_data['password1']
+				password2 = form.cleaned_data['password2']
+				if password != password2:
+					context = {
+						'error_message': 'Las constraseñas no coinciden',
+						'form': form
+					}
+					return render(request, 'signin_empleado.html', context)
+				first_name = form.cleaned_data['first_name']
+				last_name = form.cleaned_data['last_name']
+				new_user = User(username=username, password=password, first_name=first_name, last_name=last_name) 
+				new_user.save()
+				try:
+					group = Group.objects.get(name='empleados')
+				except Group.DoesNotExist:
+					group = Group(name='empleados')
+					group.save()
+				new_user.groups.add(group)
+				form = RegisterForm()
+				context = {
+					'success_message': 'Usuario empleado creado correctamente',
+					'form': form
+				}
+				return render(request, 'signin_empleado.html', context)
+
+		else:
+			form = RegisterForm()
+			context = {
+				'error_message': 'La información no es valida, porfavor intente nuevamente',
+				'form': form
+			}
+			return render(request, 'signin_empleado.html', context)
+	else:
+		form = RegisterForm()
+		context = {
+			'form': form
+		}
+	return render(request, 'signin_empleado.html', context)
+
+# Nombre para que no choque con import login
+def login_user(request):
+	if request.method == 'POST':
+		username = request.POST['username']
+		password = request.POST['password']
+		user = authenticate(request, username=username, password=password)
+		if user is not None:
+			login(request, user)
+			return redirect('index')
+		else:
+			mensaje = 'La combinación de usuario y contraseña no es valida'
+			context = {
+				'mensaje_error': mensaje
+			}
+			return render(request, 'login.html', context)
+	return render(request, 'login.html')
+
+def logout(request):
+    django_logout(request)
+    return redirect('index')
+
+def empleados(request):
+	if request.method == 'GET':
+		empleados = User.objects.filter(groups__name='empleados')
+		context = {
+			'empleados': empleados
+		}
+		print(empleados)
+		return render(request, 'empleados.html', context)
+
+def adm(request):
+	return render(request, 'adm/index.html')
+
+#--------------------- deprecated ---------------------
+
+def signin_empleado2(request):
 	# Cambiar idioma de los errores
 	activate('es')
 	if request.method == 'POST':
@@ -46,32 +184,3 @@ def signin_empleado(request):
 			'form': form
 		}
 	return render(request, 'signin_empleado.html', context)
-
-# Nombre para que no choque con import login
-def login_user(request):
-	if request.method == 'POST':
-		username = request.POST['username']
-		password = request.POST['password']
-		user = authenticate(request, username=username, password=password)
-		if user is not None:
-			login(request, user)
-			return redirect('index')
-		else:
-			mensaje = 'La combinación de usuario y contraseña no es valida'
-			context = {
-				'mensaje_error': mensaje
-			}
-			return render(request, 'login.html', context)
-	return render(request, 'login.html')
-
-def empleados(request):
-	if request.method == 'GET':
-		empleados = User.objects.filter(groups__name='empleados')
-		context = {
-			'empleados': empleados
-		}
-		print(empleados)
-		return render(request, 'empleados.html', context)
-
-def adm(request):
-	return render(request, 'adm/index.html')
