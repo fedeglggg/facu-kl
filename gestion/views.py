@@ -169,6 +169,9 @@ def armar_pc(request):
 def es_empleado(user):
     return user.groups.filter(name='empleados').exists()
 
+def nuevo_empleado():
+	pass
+
 #--------------------- deprecated ---------------------
 
 def signin_empleado2(request):
