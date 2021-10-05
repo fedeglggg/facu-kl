@@ -1,6 +1,8 @@
+{% load socialaccount %}
 <!doctype html>
 <html lang="en">
 {% load static %}
+{% load socialaccount %}
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -21,7 +23,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #1E3264;">
     <div class="container">
-      <a class="navbar-brand" href="#">KLINSUMOS</a>
+      <a class="navbar-brand" href="{% url 'index' %}">KLINSUMOS</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -36,12 +38,12 @@
           </li>
           {% endif %}
           <li class="nav-item active">
-            <a class="nav-link" href="#">Inicio
+            <a class="nav-link" href="{% url 'index' %}">Inicio
               <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Arma tu PC</a>
+            <a class="nav-link" href="{% url 'armar_pc' %}">Arma tu PC</a>
           </li>
           {% if user.is_authenticated %}
           <li class="nav-item">
@@ -49,11 +51,11 @@
           </li>
 
           {% else %}
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="{% url 'signin' %}">Registrate</a>
-          </li>
+          </li> -->
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login_user' %}">Iniciá sesión</a>
+            <a class="nav-link" href="{% provider_login_url 'google' %}">Ingresar con Google</a>
           </li>
           {% endif %}
 

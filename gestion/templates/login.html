@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 {% load static %}
+{% load socialaccount %}
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -38,7 +39,21 @@
   box-sizing: border-box;
   font-size: 14px;
 }
-.form button {
+.in_button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #4CAF50;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.google_button {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
@@ -117,20 +132,28 @@ body {
   </head>
   <body>
 
-{% if mensaje_error %}
-  {{ mensaje_error }}
-{% endif %}
+
 <div class="login-page">
+  
   <div class="form">
     <form class="login-form" action="" method="post">
       {% csrf_token %}
       <input type="text" name="username" placeholder="usuario" readonly onfocus="this.removeAttribute('readonly')"/>
       <input type="password" name="password" placeholder="contraseña" readonly onfocus="this.removeAttribute('readonly')"/>
-      <button>ingresar</button>
-      <p class="message">¿No esta registrado? <a href="{% url 'signin' %}">Cree una cuenta</a></p>
+      {% if mensaje_error %}
+        {{ mensaje_error }}
+      {% endif %}
+      <p></p>
+      <button class="in_button">Ingresar</button>
     </form>
+    <p></p>
+    <a href="{% provider_login_url 'google' %}" class="btn btn-lg btn-danger btn-block">Continuar con Google</a>
+     
+      
   </div>
+
 </div>
+
 
 
 {% block scripts %}

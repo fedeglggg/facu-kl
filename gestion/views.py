@@ -154,6 +154,21 @@ def empleados(request):
 def adm(request):
 	return render(request, 'adm/index.html')
 
+def armar_pc(request):
+	user = request.user
+	# if user.is_authenticated():
+	print(user)
+	if user.is_staff:
+		print('user is staff')
+	if user.is_superuser:
+		print('user is super user')
+	if es_empleado(user):
+		print('user is empleado')
+	return render(request, 'armar_pc.html')
+
+def es_empleado(user):
+    return user.groups.filter(name='empleados').exists()
+
 #--------------------- deprecated ---------------------
 
 def signin_empleado2(request):
