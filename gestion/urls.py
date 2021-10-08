@@ -17,6 +17,8 @@ urlpatterns = [
     path('empleados/', views.empleados, name='empleados'),
     path('gestion/', views.gestion, name='gestion'),
     path('armar-pc/', views.armar_pc, name='armar_pc'),
+    path('nuevo-insumo/', views.nuevo_insumo, name='nuevo_insumo'),
+    path('test/', views.test, name='test'),
     # oauth
     path('accounts/', include('allauth.urls')),
     path('logout', LogoutView.as_view()),

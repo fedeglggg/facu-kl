@@ -15,7 +15,13 @@ def index(request):
 	return render(request, 'index.html', context)
 
 def gestion(request):
-	return render(request, 'gestion.html')
+	user = request.user
+	if es_empleado(user):
+		print('yes')
+		return render(request, 'gestion_main.html')
+	else:
+		return redirect('index')
+	
 
 def signin(request):
 	if request.method == 'POST':
@@ -166,11 +172,49 @@ def armar_pc(request):
 		print('user is empleado')
 	return render(request, 'armar_pc.html')
 
+def nuevo_empleado():
+	pass
+
+def nuevo_insumo(request):
+	user = request.user
+	if not es_empleado(user):
+		return redirect('index')
+
+	if request.method == 'POST':
+		articulo = ArticleForm(request.POST, request.FILES) 
+		if articulo.is_valid():
+			articulo.save()
+			form = ArticleForm()
+			context = {
+				'success_message': 'Articulo creado con exito',
+				'form': form
+			}
+			return render(request, 'gestion_nuevo_insumo.html', context)
+		else:
+			context = {
+				'form': articulo
+			}
+			return render(request, 'gestion_nuevo_insumo.html', context)
+	else:
+		form = ArticleForm()
+		context = {
+			'form': form
+		}
+		return render(request, 'gestion_nuevo_insumo.html', context)
+	return render(request, 'gestion_nuevo_insumo.html')
+
+
+	
+		
+
 def es_empleado(user):
     return user.groups.filter(name='empleados').exists()
 
-def nuevo_empleado():
-	pass
+def es_admin(user):
+    return user.groups.filter(name='admin').exists()
+
+def test(request):
+	return render(request, 'test.html')
 
 #--------------------- deprecated ---------------------
 

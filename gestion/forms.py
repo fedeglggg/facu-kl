@@ -2,7 +2,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import MultiWidget, TextInput, PasswordInput
-
+from .models import Articulo
+from django.forms import ModelForm
 
 class LoginForm(forms.Form):
 	username = forms.CharField(max_length=16)
@@ -16,6 +17,18 @@ class RegisterForm(forms.Form):
 	first_name = forms.CharField(max_length=16, widget=forms.TextInput(attrs={'placeholder': 'Nombre', 'minlength': '3', 'class': 'text-center'}))
 	last_name = forms.CharField(max_length=16, widget=forms.TextInput(attrs={'placeholder': 'Apellido', 'minlength': '3', 'class': 'text-center'}))
 	
+class ArticleForm(ModelForm):
+	class Meta:
+		model = Articulo
+		fields = ['nombre', 'precio','marca', 'categoria', 'imagen']
+		widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control'}),
+            'marca': forms.Select(attrs={'class': 'custom-select'}),
+            'categoria': forms.Select(attrs={'class': 'custom-select'}),
+            'imagen': forms.FileInput(attrs={'class': 'form-control'})
+        }
+        
 
 
 
@@ -23,6 +36,9 @@ class RegisterForm(forms.Form):
 
 
 
+
+
+###########################################################################################
 # vieja forma
 class RegisterForm2(UserCreationForm):
 	# Workaround problem:
@@ -63,3 +79,22 @@ class RegisterForm2(UserCreationForm):
 	def __init__(self, *args, **kwargs):
 		super(RegisterForm, self).__init__(*args, **kwargs)
 		self.fields['username'].widget.attrs.pop("autofocus", None)
+
+# ejemplo de model form
+# from django.utils.translation import gettext_lazy as _
+
+# class AuthorForm(ModelForm):
+#     class Meta:
+#         model = Author
+#         fields = ('name', 'title', 'birth_date')
+#         labels = {
+#             'name': _('Writer'),
+#         }
+#         help_texts = {
+#             'name': _('Some useful help text.'),
+#         }
+#         error_messages = {
+#             'name': {
+#                 'max_length': _("This writer's name is too long."),
+#             },
+#         }

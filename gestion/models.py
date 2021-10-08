@@ -21,15 +21,15 @@ class Marca(models.Model):
 
 	def __str__(self):
 		return self.nombre
-		
 
+		
+# ImageField necesita install Pillow por pip
 class Articulo(models.Model):
-    nombre = models.CharField(max_length=30, blank=True)
-    # ImageField necesita install Pillow por pip
+    nombre = models.CharField(max_length=30, blank=False, null=False, unique=True) 
     imagen = models.ImageField(upload_to='imagenes/articulos/')
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     marca = models.ForeignKey(Marca, models.SET_NULL, blank=True, null=True)
-    # categoria = 
+    categoria = models.ForeignKey(Categoria, models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
     	return self.nombre

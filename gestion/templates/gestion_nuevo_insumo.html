@@ -1,0 +1,109 @@
+{% extends "gestion_base.html" %}
+{% load static %}
+{% block styles %}
+<style type="text/css">
+/* error messages*/
+    .info, .success, .warning, .error, .validation {
+      border: 1px solid;
+      margin: 10px 0px;
+      padding: 15px 10px 15px 50px;
+      background-repeat: no-repeat;
+      background-position: 10px center;
+    }
+    .info {
+      color: #00529B;
+      background-color: #BDE5F8;
+      background-image: url('https://i.imgur.com/ilgqWuX.png');
+    }
+    .success {
+      color: #4F8A10;
+      background-color: #DFF2BF;
+      background-image: url('https://i.imgur.com/Q9BGTuy.png');
+    }
+    .warning {
+      color: #9F6000;
+      background-color: #FEEFB3;
+      background-image: url('https://i.imgur.com/Z8q7ww7.png');
+    }
+    .error{
+      color: #D8000C;
+      background-color: #FFBABA;
+      background-image: url('https://i.imgur.com/GnyDvKN.png');
+    }
+    .validation{
+      color: #D63301;
+      background-color: #FFCCBA;
+      background-image: url('https://i.imgur.com/GnyDvKN.png');
+    }    
+ 
+
+
+
+</style>
+
+{% endblock %}
+{% block content %}
+<main>
+    <div class="container-fluid">
+        <h1 class="mt-4">Nuevo insumo</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+    </div>
+<!--     <div class="container" style="max-width: 45%; align-content: left">
+        <form action="" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" class="btn btn-primary mb-3" value="Guardar">
+        </form>
+        {% if success_message %}
+            <div class="success">
+                {{ success_message }}
+            </div>
+        {% endif %}
+    </div> -->
+
+
+    <div class="container" style="max-width: 45%; align-content: left">
+        <form action="" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="form-group">            
+                <label for="{{ form.nombre.id_for_label }}">Nombre</label>
+                {{ form.nombre }}
+                {{ form.nombre.errors }}
+            </div>
+            <div class="form-group">   
+                <label for="{{ form.precio.id_for_label }}">Costo ($)</label>
+                {{ form.precio }}
+                {{ form.precio.errors }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.marca.id_for_label }}">Marca</label>
+                {{ form.marca }}
+                {{ form.marca.errors }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.categoria.id_for_label }}">Categoria</label>
+                {{ form.categoria }}
+                {{ form.categoria.errors }}
+            </div>
+            <div class="form-group">      
+                <label for="{{ form.imagen.id_for_label }}">Imagen</label>
+                {{ form.imagen }}
+                {{ form.imagen.errors }}
+            </div>
+            <input type="submit" class="btn btn-primary mb-3" value="Guardar">
+        </form>
+        {% if success_message %}
+            <div class="success">
+                {{ success_message }}
+            </div>
+        {% endif %}
+    </div>
+
+<!-- 
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'bootstrap-4.5.3-dist/js/bootstrap.js' %}"></script> -->
+</main>
+{% endblock content %}

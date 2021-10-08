@@ -8,6 +8,7 @@ admin.site.register(Categoria)
 admin.site.register(Venta)
 admin.site.register(Compra)
 admin.site.register(Stock)
+admin.site.register(Marca)
 
 
 # Register your models here.
