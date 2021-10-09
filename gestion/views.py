@@ -7,6 +7,8 @@ from django.utils.translation import activate
 from .models import * 
 from .forms import *
 
+from django.http import HttpResponse
+
 def index(request):
 	articulos = Articulo.objects.all().order_by('nombre')
 	context = {
@@ -203,9 +205,17 @@ def nuevo_insumo(request):
 		return render(request, 'gestion_nuevo_insumo.html', context)
 	return render(request, 'gestion_nuevo_insumo.html')
 
-
+def listar_insumos(request):
+	listado_insumos = Articulo.objects.all() # TODO trae imagenes también
+	context = {
+	'listado_insumos': listado_insumos
+	}
+	return render(request, 'gestion_listar_insumos.html', context)
 	
-		
+def modificar_insumo(request, insumo_id):
+	insumo = Articulo.objects.get(id=insumo_id)
+	# TODO return render del objeto, modificar y eliminar
+	return HttpResponse('as')
 
 def es_empleado(user):
     return user.groups.filter(name='empleados').exists()
